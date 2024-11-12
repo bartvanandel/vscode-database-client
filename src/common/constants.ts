@@ -16,8 +16,8 @@ export class Pattern {
 
 export enum CacheKey {
     // sql
-    DATBASE_CONECTIONS = "mysql.connections",
-    DATABASE_SATE = "mysql.database.cache.collapseState",
+    DATBASE_CONECTIONS = "dbclient.connections",
+    DATABASE_SATE = "dbclient.database.cache.collapseState",
     // nosql
     NOSQL_CONNECTION = "redis.connections",
     COLLAPSE_SATE = "redis.cache.collapseState",
@@ -33,8 +33,8 @@ export enum ConfigKey {
 }
 
 export enum CodeCommand {
-    RecordHistory = "mysql.history.record",
-    Refresh = "mysql.refresh"
+    RecordHistory = "dbclient.history.record",
+    Refresh = "dbclient.refresh"
 }
 
 export class Cursor {

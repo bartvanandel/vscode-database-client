@@ -24,7 +24,7 @@ export class FTPFileNode extends FtpBaseNode {
         this.iconPath = this.getIcon(this.file.name)
         this.fullPath = (parent as FTPConnectionNode).fullPath + this.file.name;
         this.command = {
-            command: "mysql.ssh.file.open",
+            command: "dbclient.ssh.file.open",
             arguments: [this],
             title: "Open File"
         }

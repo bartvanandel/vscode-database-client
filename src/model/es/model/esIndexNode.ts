@@ -21,7 +21,7 @@ export class ESIndexNode extends Node {
         this.cacheSelf()
         this.description = `${storeSize} Docs ${docsCount}`
         this.command = {
-            command: "mysql.show.esIndex",
+            command: "dbclient.show.esIndex",
             title: "Show ES Index Data",
             arguments: [this, true],
         }

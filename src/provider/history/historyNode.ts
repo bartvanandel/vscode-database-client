@@ -9,7 +9,7 @@ export class HistoryNode extends TreeItem {
         this.tooltip = `Date: ${date}`
         this.description = `${costTime}ms`
         this.command = {
-            command: "mysql.history.view",
+            command: "dbclient.history.view",
             title: "View History",
             arguments: [this, true],
         }

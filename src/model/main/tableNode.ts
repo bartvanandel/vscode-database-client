@@ -30,7 +30,7 @@ export class TableNode extends Node implements CopyAble {
         this.tooltip = this.getToolTipe(meta)
         this.cacheSelf()
         this.command = {
-            command: "mysql.table.find",
+            command: "dbclient.table.find",
             title: "Run Select Statement",
             arguments: [this, true],
         }

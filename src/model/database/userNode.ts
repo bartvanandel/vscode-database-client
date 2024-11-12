@@ -14,7 +14,7 @@ export class UserNode extends Node implements CopyAble {
         super(username)
         this.init(parent)
         this.command = {
-            command: "mysql.user.sql",
+            command: "dbclient.user.sql",
             title: "Run User Detail Statement",
             arguments: [this, true],
         }
