@@ -2,16 +2,14 @@ const path = require('path');
 const { VueLoaderPlugin } = require('vue-loader')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
-const isProd = process.argv.indexOf('--mode=production') >= 0;
+const isProd = process.argv.includes('--mode=production');
 var webpack = require('webpack');
 
 module.exports = [
     {
         target: "node",
         node: {
-            fs: 'empty', net: 'empty', tls: 'empty',
-            child_process: 'empty', dns: 'empty',
-            global: true, __dirname: true
+            global: true, __dirname: true,
         },
         entry: ['./src/extension.ts'],
         output: {
@@ -29,10 +27,21 @@ module.exports = [
             extensions: ['.ts', '.js'],
             alias: {
                 '@': path.resolve(__dirname, './src')
-            }
+            },
+            fallback: {
+                browser: false,
+                child_process: false,
+                dns: false,
+                fs: false,
+                net: false,
+                process: false,
+                tls: false,
+            },
         },
         plugins: [
-            new webpack.IgnorePlugin(/^(pg-native|cardinal|encoding|aws4)$/)
+            new webpack.IgnorePlugin({
+                resourceRegExp: /^(pg-native|cardinal|encoding|aws4)$/,
+            })
         ],
         module: { rules: [{ test: /\.ts$/, exclude: /(node_modules|bin)/, use: ['ts-loader'] }] },
         optimization: { minimize: isProd },
@@ -59,7 +68,26 @@ module.exports = [
         },
         resolve: {
             extensions: ['.vue', '.js'],
-            alias: { 'vue$': 'vue/dist/vue.esm.js', '@': path.resolve('src'), }
+            alias: {
+                // Vue 2:
+                'vue$': 'vue/dist/vue.esm.js',
+
+                // Vue 3:
+                // 'vue': '@vue/runtime-dom',
+                // 'Vue': 'vue/dist/vue.esm-bundler.js',
+
+                // Base src
+                '@': path.resolve('src'),
+            },
+            fallback: {
+                browser: false,
+                child_process: false,
+                dns: false,
+                fs: false,
+                net: false,
+                process: false,
+                tls: false,
+            },
         },
         module: {
             rules: [

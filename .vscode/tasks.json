@@ -25,10 +25,10 @@
                     "background": {
                         "activeOnStart": true,
                         "beginsPattern": {
-                            "regexp": "webpack is watching the files"
+                            "regexp": "^> webpack --progress$"
                         },
                         "endsPattern": {
-                            "regexp": "Entrypoint HtmlWebpackPlugin_0"
+                            "regexp": "^webpack \\S* compiled successfully in \\d* \\S+$"
                         }
                     }
                 }
