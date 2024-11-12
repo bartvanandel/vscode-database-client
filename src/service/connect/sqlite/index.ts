@@ -3,40 +3,51 @@ import { StreamParser } from './streamParser';
 import { ResultSetParser } from './resultSetParser';
 import { EOL } from 'os';
 import { Result, ResultNew, ResultSet } from "./common";
-import { validateSqliteCommand } from "./sqliteCommandValidation";
+import { getSqliteCommandArguments, getSqliteCommand, getSqliteInitQueries, validateSqliteCommand } from "./sqliteCommandValidation";
 import { FieldInfo } from "../../../common/typeDef";
 
 class SQLite {
 
     public readonly dbPath: string;
-    private sqliteCommand!: string;
+    private command!: string;
+    private args: string[] = [];
+    private initQueries: string[] = [];
 
     constructor(dbPath: string) {
         this.dbPath = dbPath;
-        this.setSqliteCommand(null);
+        this.setSqliteCommand(
+            getSqliteCommand(),
+            getSqliteCommandArguments(),
+            getSqliteInitQueries()
+        );
     }
 
     query(query: string): Promise<ResultNew | ResultNew[]> {
-        if (!this.sqliteCommand) Promise.resolve({ error: "Unable to execute query: provide a valid sqlite3 executable in the setting sqlite.sqlite3." });
         return new Promise((res, rej) => {
-
+            if (!this.command) {
+                return rej({ error: "Unable to execute query: provide a valid SQLite executable in the setting dbclient.sqliteCmd." });
+            }
 
             let resultSet: Array<Result>;
             let errorMessage = "";
             let streamParser = new StreamParser(new ResultSetParser());
 
             let args = [
-                //dbPath,
-                `-header`, // print the headers before the result rows
-                `-nullvalue`, `NULL`, // print NULL for null values
-                //`-echo`, // print the statement before the result
-                `-cmd`, `.mode tcl`
+                ...this.args,
+                //dbPath,  // open using query command to prevent load error due to unicode handling on Windows; see e.g. vscode-sqlite github #32, #37.
             ];
 
-            let proc = child_process.spawn(this.sqliteCommand, args, { stdio: ['pipe', "pipe", "pipe"] });
-            // these next lines are written in the stdin to avoid errors when using unicode characters (see issues #32, #37)
-            proc.stdin.write(`.open '${this.dbPath}'${EOL}`);
-            proc.stdin.write(`.echo on${EOL}`);
+            let proc = child_process.spawn(this.command, args, { stdio: ["pipe", "pipe", "pipe"] });
+            for (const q of [
+                `.open '${this.dbPath}'`,
+                ...this.initQueries,
+                '.mode tcl',
+                '.headers on',  // print the headers before the result rows
+                '.nullvalue NULL',  // print NULL for null values
+                '.echo on',  // print the statement before the result
+            ]) {
+                proc.stdin.write(`${q}${EOL}`);
+            }
             proc.stdin.end(query);
 
             proc.stdout.pipe(streamParser).once('done', (data: ResultSet) => {
@@ -82,8 +93,10 @@ class SQLite {
         })
     }
 
-    setSqliteCommand(sqliteCommand: string) {
-        this.sqliteCommand = validateSqliteCommand(sqliteCommand);
+    setSqliteCommand(sqliteCommand: string, sqliteCmdArgs?: string[], initQueries?: string[]) {
+        this.command = validateSqliteCommand(sqliteCommand);
+        this.args = sqliteCmdArgs ?? [];
+        this.initQueries = initQueries ?? [];
     }
 }
 

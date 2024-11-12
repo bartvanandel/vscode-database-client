@@ -33,7 +33,7 @@ import { PostgreSqlPageService } from "./page/postgreSqlPageService";
 import { MysqlSettingService } from "./setting/MysqlSettingService";
 import { SettingService } from "./setting/settingService";
 import ConnectionProvider from "@/model/ssh/connectionProvider";
-import { SqliTeDialect } from "./dialect/sqliteDialect";
+import { SqliteDialect } from "./dialect/sqliteDialect";
 import { MongoPageService } from "./page/mongoPageService";
 import { HighlightCreator } from "@/provider/codelen/highlightCreator";
 import { SQLSymbolProvide } from "@/provider/sqlSymbolProvide";
@@ -144,7 +144,7 @@ export class ServiceManager {
             case DatabaseType.MSSQL:
                 return new MssqlDIalect()
             case DatabaseType.SQLITE:
-                return new SqliTeDialect()
+                return new SqliteDialect()
             case DatabaseType.PG:
                 return new PostgreSqlDialect();
             case DatabaseType.ES:

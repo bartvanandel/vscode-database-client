@@ -16,6 +16,7 @@ import { ConnnetionConfig } from "./config/connnetionConfig";
 import { readFileSync } from "fs";
 import { GlobalState, WorkState } from "@/common/state";
 import { sync as commandExistsSync } from 'command-exists';
+import { validateSqliteCommand } from "./sqlite/sqliteCommandValidation";
 
 export class ConnectService {
 
@@ -43,7 +44,7 @@ export class ConnectService {
                     } else {
                         handler.emit("connect")
                     }
-                    const exists = plat == 'win32' ? true : commandExistsSync("sqlite");
+                    const exists = Boolean(validateSqliteCommand());
                     handler.emit("sqliteState", exists)
                 }).on("installSqlite", () => {
                     let command: string;

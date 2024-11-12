@@ -1,9 +1,10 @@
+import { EOL } from "os";
 import { Console } from "@/common/Console";
 import { DatabaseType, ModelType } from "@/common/constants";
 import { getKey } from "@/common/state";
 import { Util } from "@/common/util";
 import { DbTreeDataProvider } from "@/provider/treeDataProvider";
-import { getSqliteBinariesPath } from "@/service/connect/sqlite/sqliteCommandValidation";
+import { getSqliteCommandArguments, getSqliteCommand, getSqliteInitQueries } from "@/service/connect/sqlite/sqliteCommandValidation";
 import { ConnectionManager } from "@/service/connectionManager";
 import { SqlDialect } from "@/service/dialect/sqlDialect";
 import { QueryUnit } from "@/service/queryUnit";
@@ -290,29 +291,57 @@ export abstract class Node extends vscode.TreeItem implements CopyAble {
 
 
     public openTerminal() {
-        let command: string;
+        let options: vscode.TerminalOptions = {
+            name: this.dbType.toString(),
+            env: {},
+        };
+        let initQueries: string[] = [];
+
         if (this.dbType == DatabaseType.MYSQL) {
             this.checkCommand('mysql');
-            command = `mysql -u ${this.user} -p${this.password} -h ${this.host} -P ${this.port} \n`;
+            options.shellPath = 'mysql';
+            options.shellArgs = ['-u', this.user, '-p', this.password, '-h', this.host, '-P', String(this.port)];
         } else if (this.dbType == DatabaseType.PG) {
             this.checkCommand('psql');
-            let prefix = platform() == 'win32' ? 'set' : 'export';
-            command = `${prefix} "PGPASSWORD=${this.password}" && psql -U ${this.user} -h ${this.host} -p ${this.port} -d ${this.database} \n`;
+            options.shellPath = 'psql';
+            options.shellArgs = ['-U', this.user, '-h', this.host, '-p', String(this.port), '-d', this.database];
+            options.env.PGPASSWORD = this.password;
         } else if (this.dbType == DatabaseType.REDIS) {
             this.checkCommand('redis-cli');
-            command = `redis-cli -h ${this.host} -p ${this.port} \n`;
+            options.shellPath = 'redis-cli';
+            options.shellArgs = ['-h', this.host, '-p', String(this.port)];
         } else if (this.dbType == DatabaseType.MONGO_DB) {
             this.checkCommand('mongo');
-            command = `mongo --host ${this.host} --port ${this.port} ${this.user && this.password ? ` -u ${this.user} -p ${this.password}` : ''} \n`;
+            options.shellPath = 'mongo';
+            options.shellArgs = ['--host', this.host, '--port', String(this.port)];
+            if (this.user && this.password) {
+                options.shellArgs.push('-u', this.user, '-p', this.password);
+            }
         } else if (this.dbType == DatabaseType.SQLITE) {
-            command = `${getSqliteBinariesPath()} ${this.dbPath} \n`;
+            options.shellPath = getSqliteCommand();
+            options.shellArgs = [...getSqliteCommandArguments(), this.dbPath];
+            initQueries = getSqliteInitQueries();
         } else {
-            vscode.window.showErrorMessage(`Database type ${this.dbType} not support open terminal.`)
+            vscode.window.showErrorMessage(`Database type ${this.dbType} lacks terminal support.`)
             return;
         }
-        const terminal = vscode.window.createTerminal(this.dbType.toString())
-        terminal.sendText(command)
-        terminal.show()
+
+        // If there is still a need to start the db CLI by using a raw command, use the following:
+        // const terminal = vscode.window.createTerminal(options.name);
+        // const setCmd = platform() == 'win32' ? 'set' : 'export';
+        // const command = [
+        //     ...Object.entries(options.env).map((k, v) => `${setCmd} "${k}=${v}"`),
+        //     [options.shellPath, ...options.shellArgs].join(' '),
+        // ].join(' && ') + EOL;
+
+        // Otherwise, use this, which is way more secure (it doesn't allow breaking the command due to erroneous or malicious arguments):
+        const terminal = vscode.window.createTerminal(options);
+
+        for (const query of initQueries) {
+            terminal.sendText(`${query}${EOL}`);
+        }
+
+        terminal.show();
     }
 
     checkCommand(command: string) {

@@ -1,7 +1,7 @@
 import { UpdateTableParam } from "./param/updateTableParam";
 import { SqlDialect } from "./sqlDialect";
 
-export class SqliTeDialect extends SqlDialect{
+export class SqliteDialect extends SqlDialect{
     updateColumn(table: string, column: string, type: string, comment: string, nullable: string): string {
         throw new Error("Method not implemented.");
     }
@@ -9,22 +9,22 @@ export class SqliTeDialect extends SqlDialect{
         return `SELECT name index_name FROM sqlite_master WHERE type='index' and tbl_name='${table}' `;
     }
     dropIndex(table: string, indexName: string): string {
-        return `DROP INDEX ${indexName};`
+        return `DROP INDEX "${indexName}";`
     }
     showSchemas(): string {
         throw new Error("Method not implemented.");
     }
     showTables(database: string): string {
-        return `SELECT name, type FROM sqlite_master WHERE type="table" AND name <> 'sqlite_sequence' AND name <> 'sqlite_stat1' ORDER BY type ASC, name ASC;`;
+        return `SELECT name, type FROM sqlite_master WHERE type='table' AND name <> 'sqlite_sequence' AND name <> 'sqlite_stat1' ORDER BY type ASC, name ASC;`;
     }
     addColumn(table: string): string {
         throw new Error("Method not implemented.");
     }
     showColumns(database: string, table: string): string {
-        return `PRAGMA table_info(${table})`;
+        return `PRAGMA table_info("${table}")`;
     }
     showViews(database: string): string {
-        return `SELECT name, type FROM sqlite_master WHERE type="view" AND name <> 'sqlite_sequence' AND name <> 'sqlite_stat1' ORDER BY type ASC, name ASC;`;
+        return `SELECT name, type FROM sqlite_master WHERE type='view' AND name <> 'sqlite_sequence' AND name <> 'sqlite_stat1' ORDER BY type ASC, name ASC;`;
     }
     showUsers(): string {
         throw new Error("Method not implemented.");
@@ -42,7 +42,7 @@ export class SqliTeDialect extends SqlDialect{
         throw new Error("Method not implemented.");
     }
     buildPageSql(database: string, table: string, pageSize: number): string {
-        return `SELECT * FROM ${table} LIMIT ${pageSize};`;
+        return `SELECT * FROM "${table}" LIMIT ${pageSize};`;
     }
     countSql(database: string, table: string): string {
         throw new Error("Method not implemented.");

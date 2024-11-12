@@ -1005,6 +1005,41 @@
 					"type": "boolean",
 					"default": false,
 					"description": "Show trigger on tree view."
+				},
+				"database-client.sqliteCmd": {
+					"type": "string",
+					"default": "",
+					"markdownDescription": "Path to the SQLite (`/path/to/sqlite3`, `/path/to/sqlite`) or SpatiaLite (`/path/to/spatialite`) executable. When omitted, the extension will try to locate SQLite itself.",
+					"scope": "machine"
+				},
+				"database-client.sqliteCmdArgs": {
+					"type": "array",
+					"items": {
+						"type": "string"
+					},
+					"default": [],
+					"markdownDescription": "Arguments to the sqlite command. Note: for loading extensions, it's better to add them as initial queries to `database-client.sqliteInitQueries`",
+					"examples": [
+						[
+							"-cmd",
+							".load /usr/local/lib/mod_spatialite.dylib"
+						]
+					],
+					"scope": "machine"
+				},
+				"database-client.sqliteInitQueries": {
+					"type": "array",
+					"items": {
+						"type": "string"
+					},
+					"default": [],
+					"markdownDescription": "Queries to run after opening an SQLite database. For example, to preload the `mod_spatialite` module on MacOS, add `.load /usr/local/lib/mod_spatialite.dylib`",
+					"examples": [
+						[
+							".load /usr/local/lib/mod_spatialite.dylib"
+						]
+					],
+					"scope": "machine"
 				}
 			}
 		}

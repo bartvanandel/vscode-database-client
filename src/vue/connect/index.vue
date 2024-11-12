@@ -342,7 +342,7 @@ export default {
       let filters = {};
       switch (event) {
         case "sqlite":
-          filters["SQLiteDb"] = ["db"];
+          filters["SQLiteDb"] = ["db", "db3", "sdb", "s3db", "sqlite", "sqlite3"];
           break;
         case "privateKey":
           filters["PrivateKey"] = ["key", "cer", "crt", "der", "pub", "pem", "pk"];

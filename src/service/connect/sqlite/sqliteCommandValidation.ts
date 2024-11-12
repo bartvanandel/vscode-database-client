@@ -7,12 +7,12 @@ import { sync as commandExistsSync } from 'command-exists';
 /**
  * Validate the sqlite3 command/path passed as argument, if not valid fallback to the binary in the bin directory.
  */
-export function validateSqliteCommand(sqliteCommand: string): string {
+export function validateSqliteCommand(sqliteCommand?: string): string {
     let isValid = sqliteCommand && isSqliteCommandValid(sqliteCommand);
     if (isValid) {
         return sqliteCommand;
     } else {
-        return getSqliteBinariesPath();
+        return getSqliteCommand();
     }
 }
 
@@ -49,15 +49,24 @@ export function isSqliteCommandValid(sqliteCommand: string) {
  * Get the path of the sqlite3 binaries based on the platform.
  * If there are no binaries for the platform returns an empty string.
  */
-export function getSqliteBinariesPath(): string {
+export function getSqliteCommand(): string {
 
-    if (commandExistsSync('sqlite3')) {
-        return 'sqlite3';
+    let sqliteBin: string = Global.getConfig<string>("sqliteCmd", "").trim();
+
+    if (sqliteBin !== "") {
+        console.info(`Using user configured SQLite binary: ${sqliteBin}`);
+        return sqliteBin;
     }
 
-    let plat = platform();
-    let os_arch = arch();
-    let sqliteBin: string;
+    for (const command of ['sqlite3', 'sqlite']) {
+        if (commandExistsSync(command)) {
+            console.info(`Using SQLite binary found in path: ${command}`);
+            return command;
+        }
+    }
+
+    const plat = platform();
+    const os_arch = arch();
 
     switch (plat) {
         case 'win32':
@@ -90,4 +99,12 @@ export function getSqliteBinariesPath(): string {
     } else {
         return '';
     }
+}
+
+export function getSqliteCommandArguments(): string[] {
+    return Global.getConfig<string[]>("sqliteCmdArgs", []);
+}
+
+export function getSqliteInitQueries(): string[] {
+    return Global.getConfig<string[]>("sqliteInitQueries", []);
 }
