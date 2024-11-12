@@ -1,6 +1,6 @@
 import * as vscode from "vscode";
 import * as fs from "fs";
-import process = require('process');
+import process from 'process';
 import { SettingService } from "./settingService";
 
 export class MysqlSettingService implements SettingService {

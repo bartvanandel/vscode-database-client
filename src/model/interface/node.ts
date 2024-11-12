@@ -11,7 +11,7 @@ import { ServiceManager } from "@/service/serviceManager";
 import { platform } from "os";
 import * as vscode from "vscode";
 import { Memento } from "vscode";
-var commandExistsSync = require('command-exists').sync;
+import { sync as commandExistsSync } from 'command-exists';
 import { DatabaseCache } from "../../service/common/databaseCache";
 import { NodeUtil } from "../nodeUtil";
 import { CopyAble } from "./copyAble";

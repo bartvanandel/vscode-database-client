@@ -1,11 +1,11 @@
 import * as vscode from "vscode";
 import * as path from "path";
 
-const extName=require("@/../package.json")
+import pkgJson from "@/../package.json";
 
 export class Constants {
     public static CONFIG_PREFIX = "database-client"
-    public static RES_PATH = path.join(vscode.extensions.getExtension(`${extName.publisher}.${extName.name}`).extensionPath, "resources");
+    public static RES_PATH = path.join(vscode.extensions.getExtension(`${pkgJson.publisher}.${pkgJson.name}`).extensionPath, "resources");
 }
 
 export class Pattern {

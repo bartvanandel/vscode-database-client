@@ -4,7 +4,7 @@ import { ViewNode } from "@/model/main/viewNode";
 import * as vscode from "vscode";
 import { Node } from "../../model/interface/node";
 import { TableNode } from "../../model/main/tableNode";
-import format = require('date-format');
+import format from 'date-format';
 import { FunctionGroup } from "@/model/main/functionGroup";
 import { ProcedureGroup } from "@/model/main/procedureGroup";
 import { TriggerGroup } from "@/model/main/triggerGroup";

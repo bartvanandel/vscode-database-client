@@ -1,7 +1,7 @@
-import tunnel = require('./tunnel-ssh')
+import tunnel from './tunnel-ssh';
 import { Node } from '../../model/interface/node';
 import { Console } from '../../common/Console';
-import { existsSync } from 'fs';
+import { existsSync, readFileSync } from 'fs';
 import * as portfinder from 'portfinder'
 import { DatabaseType } from '@/common/constants';
 import { spawn } from "child_process";
@@ -40,7 +40,7 @@ export class SSHTunnelService {
                 passphrase: ssh.passphrase,
                 privateKey: (() => {
                     if (ssh.privateKeyPath && existsSync(ssh.privateKeyPath)) {
-                        return require('fs').readFileSync(ssh.privateKeyPath)
+                        readFileSync(ssh.privateKeyPath)
                     }
                     return null
                 })()

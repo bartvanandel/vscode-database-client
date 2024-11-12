@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-const url = require('url');
+import url from 'url';
 
 export class DocumentFinder {
 

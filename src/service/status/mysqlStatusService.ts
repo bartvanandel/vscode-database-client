@@ -1,6 +1,6 @@
 import { ConnectionNode } from "../../model/database/connectionNode";
 import { AbstractStatusService, DashBoardItem, DashBoardResponse } from "./abstractStatusService";
-import format = require('date-format');
+import format from 'date-format';
 
 interface QueryResponse {
     Variable_name: string,

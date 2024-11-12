@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 import { ElasticMatch } from './ElasticMatch';
 import { ElasticMatches } from './ElasticMatches';
-import routington = require('routington');
+import routington from 'routington';
 
 export class ElasticCompletionItemProvider implements vscode.CompletionItemProvider {
 

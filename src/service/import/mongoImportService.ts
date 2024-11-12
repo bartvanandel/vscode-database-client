@@ -4,7 +4,7 @@ import { Node } from "@/model/interface/node";
 import { NodeUtil } from "@/model/nodeUtil";
 import { exec } from "child_process";
 import { ImportService } from "./importService";
-var commandExistsSync = require('command-exists').sync;
+import { sync as commandExistsSync } from 'command-exists';
 
 export class MongoImportService extends ImportService {
 

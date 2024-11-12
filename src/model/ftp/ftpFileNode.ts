@@ -9,9 +9,8 @@ import { Node } from '../interface/node';
 import { FtpBaseNode } from './ftpBaseNode';
 import { FTPConnectionNode } from './ftpConnectionNode';
 import * as Client from '@/model/ftp/lib/connection'
-var progressStream = require('progress-stream');
-
-const prettyBytes = require('pretty-bytes');
+import progressStream from 'progress-stream';
+import prettyBytes from 'pretty-bytes';
 
 export class FTPFileNode extends FtpBaseNode {
     contextValue = ModelType.FILE;

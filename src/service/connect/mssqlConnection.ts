@@ -1,10 +1,9 @@
 import { Connection, ConnectionConfig, Request } from "@/bin/tedious";
-import { ConnectionError } from 'tedious'
 import { Node } from "@/model/interface/node";
 import { EventEmitter } from "events";
 import { queryCallback } from "./connection";
 import { ConnectionPool } from "./pool/connectionPool";
-import format = require('date-format');
+import format from 'date-format';
 
 /**
  * tedious not support connection queue, so need using pool.

@@ -4,7 +4,7 @@ import { NodeUtil } from "@/model/nodeUtil";
 import { exec } from "child_process";
 import { platform } from "os";
 import { ImportService } from "./importService";
-var commandExistsSync = require('command-exists').sync;
+import { sync as commandExistsSync } from 'command-exists';
 
 export class PostgresqlImortService extends ImportService {
     public importSql(importPath: string, node: Node): void {

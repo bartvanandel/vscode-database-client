@@ -11,9 +11,8 @@ import { TreeItemCollapsibleState } from "vscode";
 import { Node } from '../interface/node';
 import { SSHConfig } from '../interface/sshConfig';
 import ConnectionProvider from './connectionProvider';
-var progressStream = require('progress-stream');
-
-const prettyBytes = require('pretty-bytes');
+import progressStream from 'progress-stream';
+import prettyBytes from 'pretty-bytes';
 
 export class FileNode extends Node {
     contextValue = ModelType.FILE;

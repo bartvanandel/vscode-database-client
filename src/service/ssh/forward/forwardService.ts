@@ -1,4 +1,5 @@
-import tunnel = require('./tunnel')
+import { readFileSync } from 'fs';
+import tunnel from './tunnel';
 import { exec } from "child_process";
 import { ViewManager } from '@/common/viewManager';
 import { join } from 'path';
@@ -92,7 +93,7 @@ export class ForwardService {
                 keepAlive: true,
                 privateKey: (() => {
                     if (sshConfig.privateKeyPath) {
-                        return require('fs').readFileSync(sshConfig.privateKeyPath)
+                        readFileSync(sshConfig.privateKeyPath)
                     }
                 })()
             };

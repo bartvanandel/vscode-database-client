@@ -3,7 +3,7 @@ import { exec } from "child_process";
 import { Console } from "../../common/Console";
 import { NodeUtil } from "../../model/nodeUtil";
 import { ImportService } from "./importService";
-var commandExistsSync = require('command-exists').sync;
+import { sync as commandExistsSync } from 'command-exists';
 
 export class MysqlImportService extends ImportService {
 

@@ -6,7 +6,7 @@ import { ViewNode } from "@/model/main/viewNode";
 import { NodeUtil } from "@/model/nodeUtil";
 import { DumpService } from "./dumpService";
 import * as vscode from "vscode";
-var commandExistsSync = require('command-exists').sync;
+import { sync as commandExistsSync } from 'command-exists';
 
 export class MysqlDumpService extends DumpService {
 

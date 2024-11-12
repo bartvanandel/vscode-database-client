@@ -14,9 +14,10 @@ import { SSHConfig } from "../interface/sshConfig";
 import { InfoNode } from "../other/infoNode";
 import { FileNode } from "./fileNode";
 import { LinkNode } from "./linkNode";
-import prettyBytes = require("pretty-bytes");
+import prettyBytes from "pretty-bytes";
 import { Global } from "@/common/global";
-var progressStream = require('progress-stream');
+import progressStream from 'progress-stream';
+import { exec } from 'child_process';
 
 export class SSHConnectionNode extends Node {
 
@@ -61,7 +62,6 @@ export class SSHConnectionNode extends Node {
     }
 
     public startSocksProxy() {
-        var exec = require('child_process').exec;
         if (this.sshConfig.privateKeyPath) {
             exec(`cmd /c start ssh -i ${this.sshConfig.privateKeyPath} -qTnN -D 127.0.0.1:1080 root@${this.sshConfig.host}`)
         } else {

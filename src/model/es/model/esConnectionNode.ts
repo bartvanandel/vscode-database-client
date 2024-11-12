@@ -11,7 +11,8 @@ import { ConnectionManager } from "../../../service/connectionManager";
 import { CommandKey, Node } from "../../interface/node";
 import { EsIndexGroup } from "./esIndexGroupNode";
 import { EsTemplate } from "./esTemplate";
-const extPackage=require("@/../package.json")
+
+import pkgJson from "@/../package.json";
 
 /**
  * https://www.elastic.co/guide/en/elasticsearch/reference/current/index.html
@@ -24,7 +25,7 @@ export class EsConnectionNode extends Node {
     constructor(readonly key: string, readonly parent: Node) {
         super(key)
         this.init(parent)
-        if(compareVersions(extPackage.version,'3.6.6')===1){
+        if(compareVersions(pkgJson.version,'3.6.6')===1){
             this.label = (this.usingSSH) ? `${this.ssh.host}@${this.ssh.port}` : `${this.host}`;
         }else{
             this.label = (this.usingSSH) ? `${this.ssh.host}@${this.ssh.port}` : `${this.host}@${this.port}`;

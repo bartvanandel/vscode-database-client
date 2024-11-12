@@ -1,6 +1,6 @@
 "user strict";
 import * as vscode from "vscode";
-import format = require('date-format');
+import format from 'date-format';
 
 export class Console {
     public static log(value: any) {

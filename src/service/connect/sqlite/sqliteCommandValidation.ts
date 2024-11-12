@@ -2,7 +2,7 @@ import { Global } from '@/common/global';
 import { spawnSync } from 'child_process';
 import { existsSync } from 'fs';
 import { arch, platform } from 'os';
-var commandExistsSync = require('command-exists').sync;
+import { sync as commandExistsSync } from 'command-exists';
 
 /**
  * Validate the sqlite3 command/path passed as argument, if not valid fallback to the binary in the bin directory.

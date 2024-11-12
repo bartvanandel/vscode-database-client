@@ -8,7 +8,7 @@ import * as path from "path";
 import * as vscode from "vscode";
 import { RedisFolderNode } from "./folderNode";
 import RedisBaseNode from "./redisBaseNode";
-var commandExistsSync = require('command-exists').sync;
+import { sync as commandExistsSync } from 'command-exists';
 
 export class RedisConnectionNode extends RedisBaseNode {
 
